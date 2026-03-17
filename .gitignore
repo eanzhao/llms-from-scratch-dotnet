@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+.vscode/
+
+**/bin/
+**/obj/
+
+web/node_modules/
+web/.astro/
+web/dist/
+web/.vercel/

@@ -1,0 +1,36 @@
+---
+import "../styles/site.css";
+import { withBasePath } from "../utils/withBasePath";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "C# / .NET 路线下的 LLM 从零学习笔记。" } = Astro.props;
+const roadmapUrl = withBasePath("docs/roadmap");
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="site-header">
+        <a class="brand" href={roadmapUrl}>LLMs from Scratch .NET</a>
+        <nav>
+          <a href={roadmapUrl}>学习路线图</a>
+        </nav>
+      </header>
+
+      <main class="content">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

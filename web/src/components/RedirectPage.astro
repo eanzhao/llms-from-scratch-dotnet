@@ -1,0 +1,28 @@
+---
+import { withBasePath } from "../utils/withBasePath";
+
+interface Props {
+  to: string;
+  from?: string;
+}
+
+const { to, from } = Astro.props;
+const destinationPath = withBasePath(to);
+const canonicalUrl = Astro.site ? new URL(destinationPath, Astro.site).toString() : destinationPath;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${destinationPath}`} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{`Redirecting to: ${destinationPath}`}</title>
+  </head>
+  <body>
+    <a href={destinationPath}>
+      {from ? `Redirecting from ${from} to ${destinationPath}` : `Redirecting to ${destinationPath}`}
+    </a>
+  </body>
+</html>

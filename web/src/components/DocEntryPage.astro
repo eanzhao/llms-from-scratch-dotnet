@@ -1,0 +1,37 @@
+---
+import { getCollection, getEntry, render } from "astro:content";
+import DocsLayout from "../layouts/DocsLayout.astro";
+
+interface Props {
+  entryId: string;
+}
+
+const { entryId } = Astro.props;
+const docs = (await getCollection("docs")).sort((left, right) => left.data.order - right.data.order);
+const entry = await getEntry("docs", entryId);
+
+if (!entry) {
+  throw new Error(`Doc entry not found: ${entryId}`);
+}
+
+const { Content } = await render(entry);
+const chapterLabel = entry.data.chapter ? `Chapter ${entry.data.chapter}` : "Guide";
+---
+
+<DocsLayout
+  title={`${entry.data.title} | LLMs from Scratch .NET`}
+  description={entry.data.summary}
+  docs={docs}
+  currentId={entry.slug}
+  currentTitle={entry.data.title}
+>
+  <article class="doc">
+    <div class="doc-meta">
+      <span>{chapterLabel}</span>
+      <span>状态：{entry.data.status}</span>
+    </div>
+    <h1>{entry.data.title}</h1>
+    <p class="summary">{entry.data.summary}</p>
+    <Content />
+  </article>
+</DocsLayout>

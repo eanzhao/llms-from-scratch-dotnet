@@ -1,0 +1,211 @@
+---
+import SiteLayout from "./SiteLayout.astro";
+import { withBasePath } from "../utils/withBasePath";
+
+interface DocEntry {
+  id: string;
+  slug: string;
+  data: {
+    title: string;
+    order: number;
+    chapter?: number;
+    summary: string;
+    status: "planned" | "in-progress" | "done";
+  };
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  docs: DocEntry[];
+  currentId?: string;
+  currentTitle?: string;
+}
+
+const {
+  title,
+  description = "C# / .NET 路线下的 LLM 从零学习笔记。",
+  docs,
+  currentId,
+  currentTitle = "学习路线图"
+} = Astro.props;
+
+const sortedDocs = [...docs].sort((left, right) => left.data.order - right.data.order);
+const guideDocs = sortedDocs.filter((entry) => entry.data.chapter === undefined);
+const chapterDocs = sortedDocs.filter((entry) => entry.data.chapter !== undefined);
+const docUrl = (entryId: string) => withBasePath(`docs/${entryId}`);
+---
+
+<SiteLayout title={title} description={description}>
+  <div class="docs-shell" data-docs-shell>
+    <div class="docs-overlay" data-sidebar-overlay></div>
+
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-block">
+          <div class="sidebar-head">
+            <div>
+              <p class="sidebar-kicker">Documentation</p>
+              <h2 class="sidebar-heading">学习导航</h2>
+              <p class="sidebar-summary">
+                用路线图定顺序，用章节做推进。
+              </p>
+            </div>
+
+            <button class="sidebar-close" type="button" data-sidebar-toggle aria-controls="docs-sidebar" aria-expanded="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="visually-hidden" data-toggle-label>关闭导航</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-block sidebar-block-compact">
+          <button class="sidebar-search" type="button" aria-label="Search documentation" disabled>
+            <span class="sidebar-search-icon" aria-hidden="true">⌘</span>
+            <span class="sidebar-search-text">Search docs</span>
+            <span class="sidebar-search-shortcut">K</span>
+          </button>
+        </div>
+
+        {guideDocs.length > 0 && (
+          <div class="sidebar-block">
+            <p class="sidebar-title">学习路线图</p>
+            <nav class="sidebar-links" aria-label="学习路线图">
+              {guideDocs.map((entry) => (
+                <a
+                  class:list={["sidebar-link", currentId === entry.slug && "is-active"]}
+                  href={docUrl(entry.slug)}
+                  aria-current={currentId === entry.slug ? "page" : undefined}
+                >
+                  <span>{entry.slug === "roadmap" ? "路线图" : "Guide"}</span>
+                  <small>{entry.data.title}</small>
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+
+        <div class="sidebar-block">
+          <p class="sidebar-title">章节</p>
+          <nav class="sidebar-links" aria-label="章节导航">
+            {chapterDocs.map((entry) => (
+              <a
+                class:list={["sidebar-link", currentId === entry.slug && "is-active"]}
+                href={docUrl(entry.slug)}
+                aria-current={currentId === entry.slug ? "page" : undefined}
+              >
+                <span>{`Chapter ${entry.data.chapter}`}</span>
+                <small>{entry.data.title}</small>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <div class="docs-main">
+      <div class="docs-topbar">
+        <button class="docs-nav-toggle" type="button" data-sidebar-toggle aria-controls="docs-sidebar" aria-expanded="true">
+          <span class="docs-nav-toggle-icon" aria-hidden="true">
+            <!-- Desktop: arrow icons for collapse/expand -->
+            <svg class="docs-nav-toggle-arrow docs-nav-toggle-arrow-expand" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg class="docs-nav-toggle-arrow docs-nav-toggle-arrow-collapse" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <!-- Mobile: hamburger menu -->
+            <span class="docs-nav-toggle-bars">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </span>
+          <span class="visually-hidden" data-toggle-label>折叠导航</span>
+        </button>
+
+        <div class="docs-topbar-meta">
+          <span class="docs-topbar-kicker">Docs</span>
+          <strong class="docs-topbar-title">{currentTitle}</strong>
+        </div>
+      </div>
+
+      <slot />
+    </div>
+  </div>
+</SiteLayout>
+
+<script is:inline>
+  (() => {
+    const storageKey = "llms-from-scratch-dotnet-sidebar-collapsed";
+    const shell = document.querySelector("[data-docs-shell]");
+    const toggles = Array.from(document.querySelectorAll("[data-sidebar-toggle]"));
+    const labels = Array.from(document.querySelectorAll("[data-toggle-label]"));
+    const overlay = document.querySelector("[data-sidebar-overlay]");
+    const mediaQuery = window.matchMedia("(max-width: 920px)");
+
+    if (!shell || toggles.length === 0) {
+      return;
+    }
+
+    let desktopCollapsed = window.localStorage.getItem(storageKey) === "true";
+    let mobileOpen = false;
+
+    const syncToggleState = (expanded, labelText) => {
+      toggles.forEach((toggle) => toggle.setAttribute("aria-expanded", String(expanded)));
+      labels.forEach((label) => {
+        label.textContent = labelText;
+      });
+    };
+
+    const applyState = () => {
+      if (mediaQuery.matches) {
+        shell.classList.remove("is-sidebar-collapsed");
+        shell.classList.toggle("is-sidebar-open", mobileOpen);
+        syncToggleState(mobileOpen, mobileOpen ? "关闭导航" : "打开导航");
+        return;
+      }
+
+      shell.classList.remove("is-sidebar-open");
+      shell.classList.toggle("is-sidebar-collapsed", desktopCollapsed);
+      syncToggleState(!desktopCollapsed, desktopCollapsed ? "展开导航" : "折叠导航");
+    };
+
+    const toggleSidebar = () => {
+      if (mediaQuery.matches) {
+        mobileOpen = !mobileOpen;
+        applyState();
+        return;
+      }
+
+      desktopCollapsed = !desktopCollapsed;
+      window.localStorage.setItem(storageKey, String(desktopCollapsed));
+      applyState();
+    };
+
+    toggles.forEach((toggle) => {
+      toggle.addEventListener("click", toggleSidebar);
+    });
+
+    overlay?.addEventListener("click", () => {
+      mobileOpen = false;
+      applyState();
+    });
+
+    mediaQuery.addEventListener("change", () => {
+      mobileOpen = false;
+      applyState();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && mediaQuery.matches && mobileOpen) {
+        mobileOpen = false;
+        applyState();
+      }
+    });
+
+    applyState();
+  })();
+</script>
