@@ -2,10 +2,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\LlmsFromScratch.DotNet.Shared\LlmsFromScratch.DotNet.Shared.csproj" />
+    <ProjectReference Include="..\..\Chapter02.TextData\LlmsFromScratch.DotNet.Chapter02.TextData\LlmsFromScratch.DotNet.Chapter02.TextData.csproj" />
+    <ProjectReference Include="..\..\Chapter04.Gpt\LlmsFromScratch.DotNet.Chapter04.Gpt\LlmsFromScratch.DotNet.Chapter04.Gpt.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

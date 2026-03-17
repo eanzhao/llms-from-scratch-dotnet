@@ -3,82 +3,85 @@ title: Chapter 01 · 理解大型语言模型
 order: 1
 chapter: 1
 summary: 先不写代码！建立整体认知框架，理解 LLM 的各个组件如何协同工作，为后续实现打下坚实基础。
-status: planned
+status: done
 tags:
   - fundamentals
   - concepts
 ---
 
-## 🎯 这一章的目标
+## 本章目标
 
-**先别碰键盘！** 这一章我们不写实现代码，而是专心**建立认知地图**。
-
-想象一下：你要建造一座大楼，得先看蓝图，了解每个部分的作用。LLM 就是我们要建的"大楼"。
+**先别碰键盘！** 这一章不写实现代码，专心**建立认知地图**。
 
 ### 学完这一章，你应该能用自己的话解释：
+
 - **Token**：模型眼中的"文字"长什么样？
 - **Embedding**：如何把文字变成数字（向量）？
 - **注意力机制**：为什么它是 Transformer 的灵魂？
 - **GPT**：凭什么能预测下一个词？
 - **预训练 vs 微调**：为什么同一个模型能学会不同技能？
 
-**关键**：不要死记硬背定义，要理解"为什么需要这个概念"。
+## 核心概念总览
 
-## 💻 在 C#/.NET 世界里做什么？
+### LLM 的完整数据流
 
-虽然不写模型代码，但我们可以做这些准备：
+```
+文本 → Tokenizer → Token IDs → Embedding → Transformer Blocks → Logits → 下一个词
+```
 
-### 📝 文档工作
-- 创建一份**术语表**（用 Markdown 写）
-- 画出从文本到预测的完整流程：
-  ```
-  文本 → tokenizer → token ids → embeddings → transformer → logits → 下一个词
-  ```
+每一步的作用：
 
-### 🤔 技术决策
-- 思考后续要用哪种**数值计算库**（纯 C# 数组？ML.NET？其他？）
-- 规划项目结构：代码放哪里，测试怎么写
+| 阶段 | 输入 | 输出 | 作用 |
+|------|------|------|------|
+| Tokenizer | 原始文本 | 整数序列 | 将文字切分成模型能识别的单元 |
+| Embedding | Token IDs | 向量矩阵 `[seq_len, emb_dim]` | 把离散 ID 映射为连续向量 |
+| Transformer | 向量矩阵 | 上下文化的向量矩阵 | 通过注意力机制捕获上下文关系 |
+| Output Head | 最后一层输出 | Logits `[seq_len, vocab_size]` | 预测下一个 token 的概率分布 |
 
-**小建议**：画图工具不限（手绘、Draw.io、Miro 都可以），关键是表达清楚。
+### Transformer 架构要点
 
-## 📋 建议的产出物
+1. **自注意力（Self-Attention）**：让每个 token 能"看到"序列中的其他 token，计算相关性权重
+2. **因果掩码（Causal Mask）**：GPT 是自回归模型，只能看到当前位置之前的 token
+3. **多头注意力（Multi-Head）**：多组注意力并行工作，捕获不同类型的关系模式
+4. **前馈网络（Feed-Forward）**：对每个位置独立做非线性变换，增强表达能力
+5. **残差连接 + 层归一化**：帮助深层网络稳定训练
 
-完成这一章后，你最好有：
+### 预训练 vs 微调
 
-1. **📓 术语笔记** - 用自己的话解释关键概念
-2. **🗺️ 架构图** - 可视化展示 LLM 的各个组件如何连接
-3. **🖨️ 最小控制台程序** - 打印出整个学习路线（简单，但能帮你熟悉项目结构）
+- **预训练（Pre-training）**：在大量无标注文本上训练，学习语言的通用模式（Ch05）
+- **分类微调（Classification Fine-tuning）**：冻结大部分参数，换分类头，在标注数据上训练（Ch06）
+- **指令微调（Instruction Fine-tuning / SFT）**：用指令-回复数据对全模型微调，让模型学会遵循指令（Ch07）
 
-**质量 > 数量**：这些产出是为了帮助你理解，不是为了交作业。
+## 技术决策
 
-## ⚠️ 现在先别做这些！
+本项目采用**纯 C# 手写**方式实现所有组件：
 
-为了保持专注，**暂时回避**这些诱惑：
+- **张量系统**：基于 `float[]` 的自定义 Tensor 类，支持任意维度
+- **自动微分**：Define-by-run 计算图 + 拓扑排序反向传播
+- **神经网络模块**：仿 PyTorch 的 `Module` 抽象基类
+- **优化器**：AdamW（解耦权重衰减）
+- **不依赖任何外部 ML 库**
 
-### ❌ 不要过早优化
-- 别纠结 GPU 加速（先用 CPU 跑通）
-- 别引入复杂的训练框架（从零实现才能理解本质）
+详细的基础设施文档见 [Shared 基础设施](./shared-infrastructure)。
 
-### ❌ 不要盲目模仿
-- 别急着追求"和 PyTorch 写法一样"
-- 别因为 Python 社区的做法而分心
+## 与 Python 版本的对照
 
-**记住**：我们是学习者，不是框架使用者。从零实现才能真正理解。
+| Python (PyTorch) | C# (本项目) | 说明 |
+|---|---|---|
+| `torch.Tensor` | `Tensor` (Shared/Tensors/) | 自实现，含 autograd |
+| `torch.nn.Module` | `Module` (Shared/Nn/) | 抽象基类 |
+| `torch.nn.Linear` | `Linear` (Shared/Nn/) | 全连接层 |
+| `torch.nn.Embedding` | `Embedding` (Shared/Nn/) | 查找表 |
+| `torch.optim.AdamW` | `AdamW` (Shared/Optim/) | 优化器 |
+| `torch.nn.CrossEntropyLoss` | `CrossEntropyLoss` (Shared/Nn/) | 损失函数 |
 
-## ✅ 如何判断自己学好了？
+## 后续章节预览
 
-**一个简单的自测方法**：
-
-闭上眼睛，想象一下后面六章的内容：
-- Chapter 02：处理文本数据
-- Chapter 03：实现注意力机制
-- Chapter 04：组装 GPT
-- Chapter 05：训练循环
-- Chapter 06-07：微调适配
-
-如果你能大致说出**每章要解决什么问题，产出什么结果**，并且理解它们**如何连接成完整流程**——恭喜！这一章你过关了！🎉
-
-如果还有点模糊，**完全正常**！可以：
-1. 重读这一章
-2. 看看原书对应章节
-3. 或者直接进入 Chapter 02，实践中回头理解
+| 章节 | 主题 | 核心产出 |
+|------|------|----------|
+| Ch02 | 处理文本数据 | Tokenizer、DataLoader、Embedding |
+| Ch03 | 注意力机制 | SelfAttention → MultiHeadAttention |
+| Ch04 | GPT 模型 | LayerNorm、GELU、TransformerBlock、GptModel |
+| Ch05 | 预训练 | Trainer、LossCalculator、TextGenerator |
+| Ch06 | 分类微调 | 冻结/解冻、分类头替换、SpamDataset |
+| Ch07 | 指令微调 | PromptTemplate、InstructionCollator、SFT |

@@ -3,74 +3,109 @@ title: Chapter 02 · 处理文本数据
 order: 2
 chapter: 2
 summary: 让文本"数字化"！搭建数据管道，实现 tokenizer、词表、batch 采样和 embedding 层，为模型准备好可消化的数据。
-status: planned
+status: done
 tags:
   - tokenization
   - dataset
   - embeddings
 ---
 
-## 🎯 本章目标
+## 本章目标
 
-**让文字变成数字**！这一章我们要搭建数据管道，把原始文本转换成模型能"消化"的格式。
+**让文字变成数字**！搭建数据管道，把原始文本转换成模型能"消化"的格式。
 
-想象一下：模型只认识数字，而我们要做翻译官，把人类语言翻译成模型语言。
+模型只认识数字，我们要做翻译官，把人类语言翻译成模型语言。
 
-## 🧩 建议的 C# 类结构
+## C# 实现参考
 
-为了实现数据管道，我们可以创建这些类：
+| C# 类 | 文件路径 | 对应 Python | 说明 |
+|--------|---------|------------|------|
+| `Vocabulary` | `Chapter02.TextData/Vocabulary.cs` | `SimpleTokenizerV1` | Token↔ID 双向映射 |
+| `GptDatasetV1` | `Chapter02.TextData/GptDatasetV1.cs` | `GPTDatasetV1` | 滑动窗口数据集 |
+| `DataLoader` | `Chapter02.TextData/DataLoader.cs` | `create_dataloader_v1` | 批次迭代器 |
+| `EmbeddingDemo` | `Chapter02.TextData/EmbeddingDemo.cs` | notebook 演示 | token_emb + pos_emb 演示 |
+| `SimpleTokenizer` | `Shared/Tokenization/SimpleTokenizer.cs` | `SimpleTokenizerV2` | 词级分词器 |
 
-- **`Tokenizer`** - 文本切分成 token
-- **`Vocabulary`** - 维护 token 到 ID 的映射表
-- **`TextDataset`** - 封装文本数据，支持滑动窗口
-- **`BatchSampler`** - 生成训练用的 batch
-- **`EmbeddingLookup`** - 把 token ID 变成向量
+## 核心算法
 
-**设计理念**：每个类只做一件事，保持简单、可测试。
+### 1. 分词（Tokenization）
 
-## 🔄 建议的实现顺序
+分词是 NLP 的第一步——将连续文本切分为离散单元。
 
-按这个顺序推进，从简单到复杂：
+```
+"Hello, world!" → ["Hello", ",", " ", "world", "!"]
+                → [15, 3, 7, 42, 5]   (通过词表映射)
+```
 
-### 第一步：最简单的 tokenizer
-**目标**：看清文本如何变成数字序列
-- 实现一个极其简单的版本（比如按空格分词）
-- **关键**：不要追求先进算法，先确保你能完全理解转换过程
-- 调试技巧：输入”hello world”，看看输出是什么数字序列
+本项目使用简单的词级分词器（教学用）。生产级 LLM 通常使用 BPE（Byte Pair Encoding）：
+- BPE 从字符级开始，反复合并最常共现的 token 对
+- 平衡了词表大小和 token 粒度
+- GPT-2 使用约 50,257 个 token 的 BPE 词表
 
-### 第二步：滑动窗口数据集
-**目标**：生成训练用的输入-输出对
-- 实现 next-token prediction 的数据结构
-- 例子：输入 `[t0, t1, t2, t3]` → 目标 `[t1, t2, t3, t4]`
-- **为什么**：这是 GPT 训练的基本单位
+### 2. 滑动窗口数据集
 
-### 第三步：Embedding 查找表
-**目标**：把数字变成向量
-- 实现 `token id → 向量` 的映射
-- **作用**：为后面的注意力机制准备可计算的输入
-- **注意**：先使用随机初始化的向量，后面训练时会更新
+GPT 的训练目标是 **next-token prediction**。给定前 N 个 token，预测第 N+1 个：
 
-## 📦 本章的预期产出
+```
+文本: [t0, t1, t2, t3, t4, t5, t6, ...]
+      ─────────────────────────────────
+窗口1: 输入 [t0, t1, t2, t3]  →  目标 [t1, t2, t3, t4]
+窗口2: 输入 [t1, t2, t3, t4]  →  目标 [t2, t3, t4, t5]
+窗口3: 输入 [t2, t3, t4, t5]  →  目标 [t3, t4, t5, t6]
+```
 
-完成这一章后，你应该有：
+`GptDatasetV1` 实现了这个滑动窗口：stride 控制窗口移动步长，max_length 控制窗口大小。
 
-1. **🔤 可用的 Tokenizer** - 能编码（文本→数字）和解码（数字→文本）
-2. **📊 数据加载器** - 能生成训练用的 batch
-3. **🧮 最小 Embedding 层** - 把 token ID 映射成向量
-4. **✅ 验证用例** - 若干固定样例，用于验证形状（shape）和映射关系
+### 3. DataLoader 批次生成
 
-**质量检查**：每个组件都应有简单的测试用例，确保输入输出符合预期。
+`DataLoader` 将数据集的样本组合成 batch：
 
-## 💡 重要提醒
+```
+单个样本: input [seq_len], target [seq_len]
+一个 batch: inputs [batch_size, seq_len], targets [batch_size, seq_len]
+```
 
-### 不要过早追求完美！
-- **先别纠结 BPE（Byte Pair Encoding）的完整实现**
-- 先用最简单的分词策略（如空格分词）把**整个数据流跑通**
-- 数据流稳定后，再回来优化 tokenizer
+支持 shuffle（Fisher-Yates 洗牌）和 drop_last（丢弃不完整的最后一批）。
 
-### 迭代开发思维
-1. 先搭建最小可行系统
-2. 验证整个链路能工作
-3. 再逐个组件优化
+### 4. Embedding 层
 
-**记住**：能工作的简单系统 > 复杂但卡住的"完美"设计。
+将离散的 token ID 映射为连续的向量表示：
+
+```
+Token Embedding:      token_id → 向量 [emb_dim]      (查表操作)
+Positional Embedding: position → 向量 [emb_dim]      (位置信息)
+最终输入:             token_emb + pos_emb            (逐元素相加)
+```
+
+输出形状：`[batch_size, seq_len, emb_dim]`
+
+## 实现顺序
+
+1. **Vocabulary**：建立 token↔ID 映射
+2. **SimpleTokenizer**：文本 → token 序列
+3. **GptDatasetV1**：滑动窗口生成 (input, target) 对
+4. **DataLoader**：批次迭代器
+5. **EmbeddingDemo**：token_emb + pos_emb 演示
+
+## 验证方式
+
+- 输入固定文本，检查 token ID 序列是否正确
+- 验证滑动窗口：input 右移一位 = target
+- 检查 batch 形状：`[batch_size, seq_len]`
+- Embedding 输出形状：`[batch_size, seq_len, emb_dim]`
+
+## 补充知识
+
+### BPE 分词的直觉
+
+BPE 像是一个"压缩算法"：
+1. 从字符级开始：`"low"` → `['l', 'o', 'w']`
+2. 统计相邻 pair 出现频率
+3. 合并最频繁的 pair：`'l' + 'o'` → `'lo'`
+4. 重复直到达到目标词表大小
+
+好处是既能处理常见词（整词一个 token），也能处理罕见词（拆成子词）。
+
+### 为什么需要位置编码
+
+注意力机制本身是**置换不变**的——打乱输入顺序，输出不变。但语言是有顺序的！位置编码告诉模型每个 token 在序列中的位置。GPT 使用可学习的位置编码（learnable positional embedding）。
