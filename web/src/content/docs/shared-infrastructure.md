@@ -1,7 +1,6 @@
 ---
 title: Shared 基础设施
-order: 0
-chapter: 0
+order: -1
 summary: 本项目的核心——纯 C# 手写的 Tensor 系统、自动微分引擎、神经网络模块和优化器，替代 PyTorch 的全部底层功能。
 status: done
 tags:
