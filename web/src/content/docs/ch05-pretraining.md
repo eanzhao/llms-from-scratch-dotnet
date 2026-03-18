@@ -18,12 +18,12 @@ tags:
 
 | C# 类 | 文件路径 | 对应 Python | 说明 |
 |--------|---------|------------|------|
-| `LossCalculator` | `Chapter05.Pretraining/LossCalculator.cs` | `calc_loss_batch` | 批次/数据集损失计算 |
-| `Trainer` | `Chapter05.Pretraining/Trainer.cs` | `train_model_simple` | 核心训练循环 |
-| `TrainingMetrics` | `Chapter05.Pretraining/TrainingMetrics.cs` | — | 损失跟踪 |
-| `TextSampler` | `Chapter05.Pretraining/TextSampler.cs` | `text_to_token_ids` 等 | 训练中采样 |
-| `CheckpointStore` | `Chapter05.Pretraining/CheckpointStore.cs` | `torch.save` | 模型保存/加载 |
-| `AdvancedTextGenerator` | `Chapter05.Pretraining/AdvancedTextGenerator.cs` | `generate` | temperature + top-k 采样 |
+| `LossCalculator` | [`Chapter05.Pretraining/LossCalculator.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/LossCalculator.cs) | `calc_loss_batch` | 批次/数据集损失计算 |
+| `Trainer` | [`Chapter05.Pretraining/Trainer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/Trainer.cs) | `train_model_simple` | 核心训练循环 |
+| `TrainingMetrics` | [`Chapter05.Pretraining/TrainingMetrics.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/TrainingMetrics.cs) | — | 损失跟踪 |
+| `TextSampler` | [`Chapter05.Pretraining/TextSampler.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/TextSampler.cs) | `text_to_token_ids` 等 | 训练中采样 |
+| `CheckpointStore` | [`Chapter05.Pretraining/CheckpointStore.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/CheckpointStore.cs) | `torch.save` | 模型保存/加载 |
+| `AdvancedTextGenerator` | [`Chapter05.Pretraining/AdvancedTextGenerator.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/AdvancedTextGenerator.cs) | `generate` | temperature + top-k 采样 |
 
 ## 核心算法
 

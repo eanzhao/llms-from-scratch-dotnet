@@ -111,6 +111,6 @@ Console.WriteLine($"Total: {total}, Trainable: {trainable} ({100.0*trainable/tot
 
 | 文件 | 说明 |
 |------|------|
-| `Shared/.../Nn/LoraLayer.cs` | LoRA 低秩分解层（A @ B 矩阵） |
-| `Shared/.../Nn/LinearWithLora.cs` | 包装器: original + LoRA 旁路 |
-| `Chapter06/.../LayerFreezer.cs` | ApplyLora() + CountParameters() |
+| [`Shared/.../Nn/LoraLayer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/LoraLayer.cs) | LoRA 低秩分解层（A @ B 矩阵） |
+| [`Shared/.../Nn/LinearWithLora.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/LinearWithLora.cs) | 包装器: original + LoRA 旁路 |
+| [`Chapter06/.../LayerFreezer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter06.Classification/LlmsFromScratch.DotNet.Chapter06.Classification/LayerFreezer.cs) | ApplyLora() + CountParameters() |

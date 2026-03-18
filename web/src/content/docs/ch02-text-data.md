@@ -20,11 +20,11 @@ tags:
 
 | C# 类 | 文件路径 | 对应 Python | 说明 |
 |--------|---------|------------|------|
-| `Vocabulary` | `Chapter02.TextData/Vocabulary.cs` | `SimpleTokenizerV1` | Token↔ID 双向映射 |
-| `GptDatasetV1` | `Chapter02.TextData/GptDatasetV1.cs` | `GPTDatasetV1` | 滑动窗口数据集 |
-| `DataLoader` | `Chapter02.TextData/DataLoader.cs` | `create_dataloader_v1` | 批次迭代器 |
-| `EmbeddingDemo` | `Chapter02.TextData/EmbeddingDemo.cs` | notebook 演示 | token_emb + pos_emb 演示 |
-| `SimpleTokenizer` | `Shared/Tokenization/SimpleTokenizer.cs` | `SimpleTokenizerV2` | 词级分词器 |
+| `Vocabulary` | [`Chapter02.TextData/Vocabulary.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter02.TextData/LlmsFromScratch.DotNet.Chapter02.TextData/Vocabulary.cs) | `SimpleTokenizerV1` | Token↔ID 双向映射 |
+| `GptDatasetV1` | [`Chapter02.TextData/GptDatasetV1.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter02.TextData/LlmsFromScratch.DotNet.Chapter02.TextData/GptDatasetV1.cs) | `GPTDatasetV1` | 滑动窗口数据集 |
+| `DataLoader` | [`Chapter02.TextData/DataLoader.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter02.TextData/LlmsFromScratch.DotNet.Chapter02.TextData/DataLoader.cs) | `create_dataloader_v1` | 批次迭代器 |
+| `EmbeddingDemo` | [`Chapter02.TextData/EmbeddingDemo.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter02.TextData/LlmsFromScratch.DotNet.Chapter02.TextData/EmbeddingDemo.cs) | notebook 演示 | token_emb + pos_emb 演示 |
+| `SimpleTokenizer` | [`Shared/Tokenization/SimpleTokenizer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tokenization/SimpleTokenizer.cs) | `SimpleTokenizerV2` | 词级分词器 |
 
 ## 核心算法
 

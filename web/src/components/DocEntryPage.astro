@@ -15,7 +15,13 @@ if (!entry) {
 }
 
 const { Content } = await render(entry);
-const chapterLabel = entry.data.chapter ? `Chapter ${entry.data.chapter}` : "Guide";
+const chapterLabel = entry.data.chapter
+  ? `Chapter ${entry.data.chapter}`
+  : entry.data.section === "appendix"
+    ? "Appendix"
+    : entry.data.section === "reference"
+      ? "参考"
+      : "Guide";
 ---
 
 <DocsLayout

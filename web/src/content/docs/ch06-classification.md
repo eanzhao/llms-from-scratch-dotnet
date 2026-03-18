@@ -18,10 +18,10 @@ tags:
 
 | C# 类 | 文件路径 | 对应 Python | 说明 |
 |--------|---------|------------|------|
-| `SpamDataset` | `Chapter06.Classification/SpamDataset.cs` | `SpamDataset` | 垃圾邮件分类数据集 |
-| `LayerFreezer` | `Chapter06.Classification/LayerFreezer.cs` | 手动冻结代码 | 参数冻结/解冻工具 |
-| `ClassificationTrainer` | `Chapter06.Classification/ClassificationTrainer.cs` | `train_classifier_simple` | 分类训练循环 |
-| `ClassificationMetrics` | `Chapter06.Classification/ClassificationMetrics.cs` | `calc_accuracy_loader` | 准确率计算 |
+| `SpamDataset` | [`Chapter06.Classification/SpamDataset.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter06.Classification/LlmsFromScratch.DotNet.Chapter06.Classification/SpamDataset.cs) | `SpamDataset` | 垃圾邮件分类数据集 |
+| `LayerFreezer` | [`Chapter06.Classification/LayerFreezer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter06.Classification/LlmsFromScratch.DotNet.Chapter06.Classification/LayerFreezer.cs) | 手动冻结代码 | 参数冻结/解冻工具 |
+| `ClassificationTrainer` | [`Chapter06.Classification/ClassificationTrainer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter06.Classification/LlmsFromScratch.DotNet.Chapter06.Classification/ClassificationTrainer.cs) | `train_classifier_simple` | 分类训练循环 |
+| `ClassificationMetrics` | [`Chapter06.Classification/ClassificationMetrics.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter06.Classification/LlmsFromScratch.DotNet.Chapter06.Classification/ClassificationMetrics.cs) | `calc_accuracy_loader` | 准确率计算 |
 
 ## 核心概念
 

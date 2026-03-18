@@ -124,6 +124,6 @@ trainer.Train(
 
 | 文件 | 说明 |
 |------|------|
-| `Shared/.../Optim/LrScheduler.cs` | CosineAnnealingWithWarmup 调度器 |
-| `Shared/.../Optim/AdamW.cs` | ClipGradNorm 静态方法 + Lr 属性 |
-| `Chapter05/.../Trainer.cs` | 集成了调度 + 裁剪的训练循环 |
+| [`Shared/.../Optim/LrScheduler.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Optim/LrScheduler.cs) | CosineAnnealingWithWarmup 调度器 |
+| [`Shared/.../Optim/AdamW.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Optim/AdamW.cs) | ClipGradNorm 静态方法 + Lr 属性 |
+| [`Chapter05/.../Trainer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter05.Pretraining/LlmsFromScratch.DotNet.Chapter05.Pretraining/Trainer.cs) | 集成了调度 + 裁剪的训练循环 |

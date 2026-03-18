@@ -18,12 +18,12 @@ tags:
 
 | C# 类 | 文件路径 | 对应 Python | 说明 |
 |--------|---------|------------|------|
-| `InstructionSample` | `Chapter07.InstructionTuning/InstructionSample.cs` | dict 条目 | 指令数据结构 (record) |
-| `PromptTemplate` | `Chapter07.InstructionTuning/PromptTemplate.cs` | `format_input` | 提示词模板 |
-| `InstructionDataset` | `Chapter07.InstructionTuning/InstructionDataset.cs` | `InstructionDataset` | 指令数据集（预编码） |
-| `InstructionCollator` | `Chapter07.InstructionTuning/InstructionCollator.cs` | `custom_collate_fn` | 变长 padding + 掩码 |
-| `InstructionTrainer` | `Chapter07.InstructionTuning/InstructionTrainer.cs` | 训练循环 | SFT 训练循环 |
-| `InstructionEvaluator` | `Chapter07.InstructionTuning/InstructionEvaluator.cs` | 评估代码 | 生成式评估 |
+| `InstructionSample` | [`Chapter07.InstructionTuning/InstructionSample.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter07.InstructionTuning/LlmsFromScratch.DotNet.Chapter07.InstructionTuning/InstructionSample.cs) | dict 条目 | 指令数据结构 (record) |
+| `PromptTemplate` | [`Chapter07.InstructionTuning/PromptTemplate.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter07.InstructionTuning/LlmsFromScratch.DotNet.Chapter07.InstructionTuning/PromptTemplate.cs) | `format_input` | 提示词模板 |
+| `InstructionDataset` | [`Chapter07.InstructionTuning/InstructionDataset.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter07.InstructionTuning/LlmsFromScratch.DotNet.Chapter07.InstructionTuning/InstructionDataset.cs) | `InstructionDataset` | 指令数据集（预编码） |
+| `InstructionCollator` | [`Chapter07.InstructionTuning/InstructionCollator.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter07.InstructionTuning/LlmsFromScratch.DotNet.Chapter07.InstructionTuning/InstructionCollator.cs) | `custom_collate_fn` | 变长 padding + 掩码 |
+| `InstructionTrainer` | [`Chapter07.InstructionTuning/InstructionTrainer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter07.InstructionTuning/LlmsFromScratch.DotNet.Chapter07.InstructionTuning/InstructionTrainer.cs) | 训练循环 | SFT 训练循环 |
+| `InstructionEvaluator` | [`Chapter07.InstructionTuning/InstructionEvaluator.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter07.InstructionTuning/LlmsFromScratch.DotNet.Chapter07.InstructionTuning/InstructionEvaluator.cs) | 评估代码 | 生成式评估 |
 
 ## 核心概念
 

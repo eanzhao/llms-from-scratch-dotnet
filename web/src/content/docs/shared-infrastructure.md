@@ -19,23 +19,23 @@ tags:
 
 | 目录 | 文件 | 说明 |
 |------|------|------|
-| **Tensors/** | `Tensor.cs` | 核心张量类 |
-| | `TensorOps.cs` | 张量运算（含 autograd） |
-| | `BroadcastHelper.cs` | NumPy 风格广播 |
-| | `Autograd.cs` | 反向传播引擎 |
-| | `TensorRandom.cs` | 随机数生成 |
-| **Nn/** | `Module.cs` | 神经网络模块基类 |
-| | `Linear.cs` | 全连接层 |
-| | `Embedding.cs` | 嵌入层 |
-| | `DropoutLayer.cs` | Dropout |
-| | `Sequential.cs` | 顺序容器 |
-| | `LossFunctions.cs` | 损失函数 |
-| | `LoraLayer.cs` | LoRA 低秩分解层 |
-| | `LinearWithLora.cs` | LoRA 包装器 |
-| **Optim/** | `AdamW.cs` | AdamW 优化器 + 梯度裁剪 |
-| | `LrScheduler.cs` | Cosine Annealing 学习率调度 |
-| **Tokenization/** | `SimpleTokenizer.cs` | 简单分词器 |
-| **IO/** | `ModelSerializer.cs` | 模型序列化 |
+| **Tensors/** | [`Tensor.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tensors/Tensor.cs) | 核心张量类 |
+| | [`TensorOps.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tensors/TensorOps.cs) | 张量运算（含 autograd） |
+| | [`BroadcastHelper.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tensors/BroadcastHelper.cs) | NumPy 风格广播 |
+| | [`Autograd.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tensors/Autograd.cs) | 反向传播引擎 |
+| | [`TensorRandom.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tensors/TensorRandom.cs) | 随机数生成 |
+| **Nn/** | [`Module.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Module.cs) | 神经网络模块基类 |
+| | [`Linear.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Linear.cs) | 全连接层 |
+| | [`Embedding.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Embedding.cs) | 嵌入层 |
+| | [`DropoutLayer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/DropoutLayer.cs) | Dropout |
+| | [`Sequential.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Sequential.cs) | 顺序容器 |
+| | [`LossFunctions.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/LossFunctions.cs) | 损失函数 |
+| | [`LoraLayer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/LoraLayer.cs) | LoRA 低秩分解层 |
+| | [`LinearWithLora.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/LinearWithLora.cs) | LoRA 包装器 |
+| **Optim/** | [`AdamW.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Optim/AdamW.cs) | AdamW 优化器 + 梯度裁剪 |
+| | [`LrScheduler.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Optim/LrScheduler.cs) | Cosine Annealing 学习率调度 |
+| **Tokenization/** | [`SimpleTokenizer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tokenization/SimpleTokenizer.cs) | 简单分词器 |
+| **IO/** | [`ModelSerializer.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/IO/ModelSerializer.cs) | 模型序列化 |
 
 ## Tensor 系统
 

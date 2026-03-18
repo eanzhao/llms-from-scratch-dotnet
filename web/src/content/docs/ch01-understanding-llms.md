@@ -68,12 +68,12 @@ tags:
 
 | Python (PyTorch) | C# (本项目) | 说明 |
 |---|---|---|
-| `torch.Tensor` | `Tensor` (Shared/Tensors/) | 自实现，含 autograd |
-| `torch.nn.Module` | `Module` (Shared/Nn/) | 抽象基类 |
-| `torch.nn.Linear` | `Linear` (Shared/Nn/) | 全连接层 |
-| `torch.nn.Embedding` | `Embedding` (Shared/Nn/) | 查找表 |
-| `torch.optim.AdamW` | `AdamW` (Shared/Optim/) | 优化器 |
-| `torch.nn.CrossEntropyLoss` | `CrossEntropyLoss` (Shared/Nn/) | 损失函数 |
+| `torch.Tensor` | `Tensor` ([Shared/Tensors/Tensor.cs](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Tensors/Tensor.cs)) | 自实现，含 autograd |
+| `torch.nn.Module` | `Module` ([Shared/Nn/Module.cs](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Module.cs)) | 抽象基类 |
+| `torch.nn.Linear` | `Linear` ([Shared/Nn/Linear.cs](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Linear.cs)) | 全连接层 |
+| `torch.nn.Embedding` | `Embedding` ([Shared/Nn/Embedding.cs](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/Embedding.cs)) | 查找表 |
+| `torch.optim.AdamW` | `AdamW` ([Shared/Optim/AdamW.cs](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Optim/AdamW.cs)) | 优化器 |
+| `torch.nn.CrossEntropyLoss` | `CrossEntropyLoss` ([Shared/Nn/LossFunctions.cs](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Shared/LlmsFromScratch.DotNet.Shared/Nn/LossFunctions.cs)) | 损失函数 |
 
 ## 后续章节预览
 

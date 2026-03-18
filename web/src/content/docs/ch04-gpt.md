@@ -18,13 +18,13 @@ tags:
 
 | C# 类 | 文件路径 | 对应 Python | 说明 |
 |--------|---------|------------|------|
-| `GptConfig` | `Chapter04.Gpt/GptConfig.cs` | `GPT_CONFIG_124M` | 模型配置（C# record） |
-| `LayerNorm` | `Chapter04.Gpt/LayerNorm.cs` | `LayerNorm` | 层归一化 |
-| `Gelu` | `Chapter04.Gpt/Gelu.cs` | `GELU` | GELU 激活函数 |
-| `FeedForward` | `Chapter04.Gpt/FeedForward.cs` | `FeedForward` | 前馈网络 |
-| `TransformerBlock` | `Chapter04.Gpt/TransformerBlock.cs` | `TransformerBlock` | Transformer 块 |
-| `GptModel` | `Chapter04.Gpt/GptModel.cs` | `GPTModel` | 完整 GPT 模型 |
-| `TextGenerator` | `Chapter04.Gpt/TextGenerator.cs` | `generate_text_simple` | 贪心文本生成 |
+| `GptConfig` | [`Chapter04.Gpt/GptConfig.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/GptConfig.cs) | `GPT_CONFIG_124M` | 模型配置（C# record） |
+| `LayerNorm` | [`Chapter04.Gpt/LayerNorm.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/LayerNorm.cs) | `LayerNorm` | 层归一化 |
+| `Gelu` | [`Chapter04.Gpt/Gelu.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/Gelu.cs) | `GELU` | GELU 激活函数 |
+| `FeedForward` | [`Chapter04.Gpt/FeedForward.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/FeedForward.cs) | `FeedForward` | 前馈网络 |
+| `TransformerBlock` | [`Chapter04.Gpt/TransformerBlock.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/TransformerBlock.cs) | `TransformerBlock` | Transformer 块 |
+| `GptModel` | [`Chapter04.Gpt/GptModel.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/GptModel.cs) | `GPTModel` | 完整 GPT 模型 |
+| `TextGenerator` | [`Chapter04.Gpt/TextGenerator.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter04.Gpt/LlmsFromScratch.DotNet.Chapter04.Gpt/TextGenerator.cs) | `generate_text_simple` | 贪心文本生成 |
 
 ### 预设配置
 

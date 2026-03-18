@@ -18,9 +18,9 @@ tags:
 
 | C# 类 | 文件路径 | 对应 Python | 说明 |
 |--------|---------|------------|------|
-| `SelfAttention` | `Chapter03.Attention/SelfAttention.cs` | `SelfAttention_v2` | 单头自注意力（教学用） |
-| `CausalSelfAttention` | `Chapter03.Attention/CausalSelfAttention.cs` | `CausalAttention` | 带因果掩码的注意力 |
-| `MultiHeadAttention` | `Chapter03.Attention/MultiHeadAttention.cs` | `MultiHeadAttention` | 多头注意力完整实现 |
+| `SelfAttention` | [`Chapter03.Attention/SelfAttention.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter03.Attention/LlmsFromScratch.DotNet.Chapter03.Attention/SelfAttention.cs) | `SelfAttention_v2` | 单头自注意力（教学用） |
+| `CausalSelfAttention` | [`Chapter03.Attention/CausalSelfAttention.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter03.Attention/LlmsFromScratch.DotNet.Chapter03.Attention/CausalSelfAttention.cs) | `CausalAttention` | 带因果掩码的注意力 |
+| `MultiHeadAttention` | [`Chapter03.Attention/MultiHeadAttention.cs`](https://github.com/eanzhao/llms-from-scratch-dotnet/blob/main/src/Chapter03.Attention/LlmsFromScratch.DotNet.Chapter03.Attention/MultiHeadAttention.cs) | `MultiHeadAttention` | 多头注意力完整实现 |
 
 ## 核心算法
 

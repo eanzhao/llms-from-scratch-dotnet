@@ -68,6 +68,17 @@ a {
   text-decoration: none;
 }
 
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  transition: color 160ms ease;
+}
+
+.github-link:hover {
+  color: var(--text);
+}
+
 .brand {
   font-size: 1rem;
   font-weight: 700;
@@ -454,12 +465,44 @@ a {
   border-radius: 16px;
   background: #111827;
   color: #f9fafb;
+  max-width: 100%;
 }
 
 .doc pre code {
   background: transparent;
   padding: 0;
   color: inherit;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.doc th,
+.doc td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.doc th {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.doc tr:hover {
+  background: var(--accent-soft);
+}
+
+/* 表格在小屏横向可滚动 */
+.doc .table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .visually-hidden {
@@ -592,7 +635,75 @@ a {
   }
 
   .doc {
-    padding: 24px 22px 40px;
+    padding: 24px 16px 40px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .doc h1 {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .doc :is(h2, h3) {
+    word-break: break-word;
+  }
+
+  .doc p,
+  .doc li {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .summary {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* 表格横向滚动包装 */
+  .doc table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    font-size: 0.82rem;
+  }
+
+  .doc th,
+  .doc td {
+    padding: 6px 10px;
+  }
+
+  /* 代码块 */
+  .doc pre {
+    padding: 14px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-left: -16px;
+    margin-right: -16px;
+    border-radius: 0;
+  }
+
+  .doc code {
+    font-size: 0.82rem;
+    word-break: break-all;
+  }
+
+  /* topbar 标题不截断 */
+  .docs-topbar-title {
+    white-space: normal;
+    font-size: 0.86rem;
+    line-height: 1.3;
+  }
+
+  /* site header */
+  .brand {
+    font-size: 0.88rem;
+  }
+
+  .site-header nav {
+    font-size: 0.86rem;
   }
 }
 
