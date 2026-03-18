@@ -1,6 +1,7 @@
 ---
 title: 交互式 Playground
 order: 99
+section: "reference"
 summary: 在浏览器中体验 LLM 核心组件！交互式演示分词、注意力计算、文本生成等关键步骤。
 status: done
 tags:

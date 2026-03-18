@@ -2,6 +2,8 @@
 
 这个仓库把 `LLMs-from-scratch` 的学习路线迁移到 `C# / .NET` 语境里，并额外配了一个 Astro 文档站，用 Markdown 来组织学习内容。
 
+📖 **在线文档**：<https://eanzhao.github.io/llms-from-scratch-dotnet/>
+
 ## 目标
 
 - 用你熟悉的 `C# / .NET` 重走一次从零构建 LLM 的主线。

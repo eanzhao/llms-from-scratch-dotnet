@@ -9,7 +9,7 @@ interface DocEntry {
     title: string;
     order: number;
     chapter?: number;
-    section?: "guide" | "chapter" | "appendix";
+    section?: "guide" | "chapter" | "appendix" | "reference";
     summary: string;
     status: "planned" | "in-progress" | "done";
   };
@@ -32,9 +32,10 @@ const {
 } = Astro.props;
 
 const sortedDocs = [...docs].sort((left, right) => left.data.order - right.data.order);
-const guideDocs = sortedDocs.filter((entry) => entry.data.chapter === undefined && entry.data.section !== "appendix");
+const guideDocs = sortedDocs.filter((entry) => entry.data.chapter === undefined && !entry.data.section);
 const chapterDocs = sortedDocs.filter((entry) => entry.data.chapter !== undefined);
 const appendixDocs = sortedDocs.filter((entry) => entry.data.section === "appendix");
+const referenceDocs = sortedDocs.filter((entry) => entry.data.section === "reference");
 const docUrl = (entryId: string) => withBasePath(`docs/${entryId}`);
 ---
 
@@ -81,7 +82,6 @@ const docUrl = (entryId: string) => withBasePath(`docs/${entryId}`);
                   href={docUrl(entry.slug)}
                   aria-current={currentId === entry.slug ? "page" : undefined}
                 >
-                  <span>{entry.slug === "roadmap" ? "路线图" : "Guide"}</span>
                   <small>{entry.data.title}</small>
                 </a>
               ))}
@@ -116,6 +116,23 @@ const docUrl = (entryId: string) => withBasePath(`docs/${entryId}`);
                   aria-current={currentId === entry.slug ? "page" : undefined}
                 >
                   <span>{entry.slug.startsWith("appendix-") ? `Appendix ${entry.slug.split("-")[1]?.toUpperCase()}` : "Appendix"}</span>
+                  <small>{entry.data.title}</small>
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+
+        {referenceDocs.length > 0 && (
+          <div class="sidebar-block">
+            <p class="sidebar-title">参考与工具</p>
+            <nav class="sidebar-links" aria-label="参考与工具">
+              {referenceDocs.map((entry) => (
+                <a
+                  class:list={["sidebar-link", currentId === entry.slug && "is-active"]}
+                  href={docUrl(entry.slug)}
+                  aria-current={currentId === entry.slug ? "page" : undefined}
+                >
                   <small>{entry.data.title}</small>
                 </a>
               ))}
