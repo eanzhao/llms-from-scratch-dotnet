@@ -17,11 +17,18 @@ namespace LlmsFromScratch.DotNet.Shared.Optim;
 public class AdamW
 {
     private readonly List<Tensor> _params;
-    private readonly float _lr;
+    private float _lr;
     private readonly float _beta1;
     private readonly float _beta2;
     private readonly float _eps;
     private readonly float _weightDecay;
+
+    /// <summary>当前学习率（可由 LR scheduler 动态设置）</summary>
+    public float Lr
+    {
+        get => _lr;
+        set => _lr = value;
+    }
 
     // 每个参数的一阶和二阶动量
     private readonly List<float[]> _m;
@@ -95,5 +102,44 @@ public class AdamW
     {
         foreach (var param in _params)
             param.ZeroGrad();
+    }
+
+    /// <summary>
+    /// 梯度裁剪（L2 范数）
+    /// 对应 PyTorch 的 torch.nn.utils.clip_grad_norm_
+    ///
+    /// 算法:
+    /// 1. 计算所有参数梯度的全局 L2 范数: ||G|| = sqrt(Σ ||g_i||²)
+    /// 2. 如果 ||G|| > maxNorm: 缩放所有梯度 g_i *= maxNorm / ||G||
+    /// </summary>
+    /// <returns>裁剪前的梯度总范数</returns>
+    public static float ClipGradNorm(IEnumerable<Tensor> parameters, float maxNorm)
+    {
+        // 计算全局 L2 范数
+        float totalNormSq = 0f;
+        var paramList = parameters as IList<Tensor> ?? parameters.ToList();
+
+        foreach (var param in paramList)
+        {
+            if (param.Grad == null) continue;
+            for (int i = 0; i < param.Grad.Length; i++)
+                totalNormSq += param.Grad[i] * param.Grad[i];
+        }
+
+        float totalNorm = MathF.Sqrt(totalNormSq);
+
+        // 如果超过 maxNorm，按比例缩放
+        if (totalNorm > maxNorm)
+        {
+            float scale = maxNorm / (totalNorm + 1e-6f);
+            foreach (var param in paramList)
+            {
+                if (param.Grad == null) continue;
+                for (int i = 0; i < param.Grad.Length; i++)
+                    param.Grad[i] *= scale;
+            }
+        }
+
+        return totalNorm;
     }
 }

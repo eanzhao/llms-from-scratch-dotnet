@@ -6,15 +6,17 @@ using LlmsFromScratch.DotNet.Shared.Tokenization;
 namespace LlmsFromScratch.DotNet.Chapter05.Pretraining;
 
 /// <summary>
-/// 训练器（对应 Python 版 train_model_simple）
+/// 训练器（对应 Python 版 train_model_simple + Appendix D 增强）
 ///
 /// 核心训练循环:
 /// for each epoch:
 ///     for each batch:
 ///         1. optimizer.ZeroGrad()     — 清零梯度
-///         2. loss = forward(batch)    — 前向传播计算损失
-///         3. loss.Backward()          — 反向传播计算梯度
-///         4. optimizer.Step()         — 更新参数
+///         2. lr = scheduler.GetLr()   — 调整学习率（Appendix D）
+///         3. loss = forward(batch)    — 前向传播计算损失
+///         4. loss.Backward()          — 反向传播计算梯度
+///         5. ClipGradNorm()           — 梯度裁剪（Appendix D）
+///         6. optimizer.Step()         — 更新参数
 ///     evaluate and log
 /// </summary>
 public class Trainer
@@ -38,9 +40,19 @@ public class Trainer
     }
 
     /// <summary>
-    /// 执行训练
+    /// 执行训练（基础版，无 LR scheduler）
     /// </summary>
-    public void Train(int numEpochs, int evalFreq = 5, int evalIter = 1, string startContext = "Every effort moves you")
+    public void Train(int numEpochs, int evalFreq = 5, int evalIter = 1,
+        string startContext = "Every effort moves you")
+    {
+        Train(numEpochs, evalFreq, evalIter, startContext, lrScheduler: null, maxGradNorm: null);
+    }
+
+    /// <summary>
+    /// 执行训练（增强版，支持 LR scheduler + 梯度裁剪）
+    /// </summary>
+    public void Train(int numEpochs, int evalFreq, int evalIter, string startContext,
+        CosineAnnealingWithWarmup? lrScheduler, float? maxGradNorm)
     {
         int tokensSeen = 0;
         int globalStep = -1;
@@ -52,13 +64,22 @@ public class Trainer
             foreach (var (inputBatch, targetBatch) in _trainLoader.GetBatches())
             {
                 _optimizer.ZeroGrad();
+                globalStep++;
+
+                // 学习率调度（Appendix D）
+                if (lrScheduler != null)
+                    _optimizer.Lr = lrScheduler.GetLr(globalStep);
 
                 var loss = LossCalculator.CalcLossBatch(inputBatch, targetBatch, _model);
                 loss.Backward();
+
+                // 梯度裁剪（Appendix D）
+                if (maxGradNorm.HasValue)
+                    AdamW.ClipGradNorm(_model.Parameters(), maxGradNorm.Value);
+
                 _optimizer.Step();
 
                 tokensSeen += inputBatch.Size;
-                globalStep++;
 
                 // 定期评估
                 if (globalStep % evalFreq == 0)
@@ -70,8 +91,9 @@ public class Trainer
                     Metrics.ValLosses.Add(valLoss);
                     Metrics.TokensSeen.Add(tokensSeen);
 
+                    var lrStr = lrScheduler != null ? $", LR {_optimizer.Lr:E2}" : "";
                     Console.WriteLine($"Ep {epoch + 1} (Step {globalStep:D6}): " +
-                        $"Train loss {trainLoss:F3}, Val loss {valLoss:F3}");
+                        $"Train loss {trainLoss:F3}, Val loss {valLoss:F3}{lrStr}");
                 }
             }
 

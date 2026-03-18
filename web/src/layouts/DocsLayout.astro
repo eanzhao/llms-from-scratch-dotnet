@@ -9,6 +9,7 @@ interface DocEntry {
     title: string;
     order: number;
     chapter?: number;
+    section?: "guide" | "chapter" | "appendix";
     summary: string;
     status: "planned" | "in-progress" | "done";
   };
@@ -31,8 +32,9 @@ const {
 } = Astro.props;
 
 const sortedDocs = [...docs].sort((left, right) => left.data.order - right.data.order);
-const guideDocs = sortedDocs.filter((entry) => entry.data.chapter === undefined);
+const guideDocs = sortedDocs.filter((entry) => entry.data.chapter === undefined && entry.data.section !== "appendix");
 const chapterDocs = sortedDocs.filter((entry) => entry.data.chapter !== undefined);
+const appendixDocs = sortedDocs.filter((entry) => entry.data.section === "appendix");
 const docUrl = (entryId: string) => withBasePath(`docs/${entryId}`);
 ---
 
@@ -102,6 +104,24 @@ const docUrl = (entryId: string) => withBasePath(`docs/${entryId}`);
             ))}
           </nav>
         </div>
+
+        {appendixDocs.length > 0 && (
+          <div class="sidebar-block">
+            <p class="sidebar-title">附录</p>
+            <nav class="sidebar-links" aria-label="附录导航">
+              {appendixDocs.map((entry) => (
+                <a
+                  class:list={["sidebar-link", currentId === entry.slug && "is-active"]}
+                  href={docUrl(entry.slug)}
+                  aria-current={currentId === entry.slug ? "page" : undefined}
+                >
+                  <span>{entry.slug.startsWith("appendix-") ? `Appendix ${entry.slug.split("-")[1]?.toUpperCase()}` : "Appendix"}</span>
+                  <small>{entry.data.title}</small>
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
       </div>
     </aside>
 

@@ -5,6 +5,7 @@ const docs = defineCollection({
     title: z.string(),
     order: z.number(),
     chapter: z.number().optional(),
+    section: z.enum(["guide", "chapter", "appendix"]).optional(),
     summary: z.string(),
     status: z.enum(["planned", "in-progress", "done"]).default("planned"),
     tags: z.array(z.string()).default([])

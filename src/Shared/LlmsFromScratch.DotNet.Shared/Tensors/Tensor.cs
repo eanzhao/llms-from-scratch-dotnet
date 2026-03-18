@@ -95,6 +95,16 @@ public class Tensor
         return new Tensor(data, [count]);
     }
 
+    /// <summary>创建 [start, end) 的整数序列张量</summary>
+    public static Tensor Arange(int start, int end)
+    {
+        int count = end - start;
+        var data = new float[count];
+        for (int i = 0; i < count; i++)
+            data[i] = start + i;
+        return new Tensor(data, [count]);
+    }
+
     /// <summary>创建上三角矩阵（对角线上方为 1，其余为 0）</summary>
     public static Tensor Triu(int rows, int cols, int diagonal = 0)
     {

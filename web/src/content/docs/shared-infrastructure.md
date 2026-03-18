@@ -29,7 +29,10 @@ tags:
 | | `DropoutLayer.cs` | Dropout |
 | | `Sequential.cs` | 顺序容器 |
 | | `LossFunctions.cs` | 损失函数 |
-| **Optim/** | `AdamW.cs` | AdamW 优化器 |
+| | `LoraLayer.cs` | LoRA 低秩分解层 |
+| | `LinearWithLora.cs` | LoRA 包装器 |
+| **Optim/** | `AdamW.cs` | AdamW 优化器 + 梯度裁剪 |
+| | `LrScheduler.cs` | Cosine Annealing 学习率调度 |
 | **Tokenization/** | `SimpleTokenizer.cs` | 简单分词器 |
 | **IO/** | `ModelSerializer.cs` | 模型序列化 |
 

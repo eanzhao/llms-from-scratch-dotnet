@@ -45,6 +45,26 @@ public abstract class Module
                 yield return param;
     }
 
+    /// <summary>递归获取所有命名子模块</summary>
+    public virtual IEnumerable<(string Name, Module Module)> NamedModules(string prefix = "")
+    {
+        foreach (var (name, module) in SubModules)
+        {
+            string fullName = prefix + name;
+            yield return (fullName, module);
+            foreach (var child in module.NamedModules(fullName + "."))
+                yield return child;
+        }
+    }
+
+    /// <summary>
+    /// 替换指定名称的子模块
+    /// </summary>
+    public void ReplaceSubModule(string name, Module newModule)
+    {
+        SubModules[name] = newModule;
+    }
+
     /// <summary>递归获取所有命名参数</summary>
     public virtual IEnumerable<(string Name, Tensor Param)> NamedParameters(string prefix = "")
     {

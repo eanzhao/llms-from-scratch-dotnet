@@ -10,19 +10,13 @@ namespace LlmsFromScratch.DotNet.Chapter05.Pretraining;
 /// - Temperature 缩放: 控制随机性（&gt;1 更随机，&lt;1 更确定）
 /// - Top-k 采样: 只从概率最高的 k 个 token 中采样
 /// - 提前终止: 遇到 eosId 时停止生成
+/// - KV Cache 模式: 缓存 K/V 避免重复计算（ch04/03_kv-cache）
 /// </summary>
 public static class AdvancedTextGenerator
 {
     /// <summary>
-    /// 高级文本生成
+    /// 高级文本生成（标准模式，无 cache）
     /// </summary>
-    /// <param name="model">GPT 模型</param>
-    /// <param name="idx">初始 token 序列 [batch, seqLen]</param>
-    /// <param name="maxNewTokens">最大生成 token 数</param>
-    /// <param name="contextSize">上下文窗口大小</param>
-    /// <param name="temperature">温度参数 (0=贪心, &gt;0 采样)</param>
-    /// <param name="topK">Top-K 采样参数 (null=不限制)</param>
-    /// <param name="eosId">终止 token ID (null=不提前终止)</param>
     public static Tensor Generate(GptModel model, Tensor idx, int maxNewTokens,
         int contextSize, float temperature = 0.0f, int? topK = null, int? eosId = null)
     {
@@ -76,6 +70,76 @@ public static class AdvancedTextGenerator
         }
 
         return currentIdx;
+    }
+
+    /// <summary>
+    /// 使用 KV Cache 的文本生成（推理加速）
+    ///
+    /// 流程:
+    /// 1. 重置 KV Cache
+    /// 2. 用完整 prompt 做一次前向传播（prefill，初始化 cache）
+    /// 3. 每步只传入 1 个新 token（decode，复用 cache）
+    ///
+    /// 注意：model 必须以 useKvCache=true 创建
+    /// </summary>
+    public static Tensor GenerateWithCache(GptModel model, Tensor idx, int maxNewTokens,
+        float temperature = 0.0f, int? topK = null, int? eosId = null)
+    {
+        model.SetTraining(false);
+        model.ResetKvCache();
+        var rng = new Random();
+        var currentIdx = idx;
+
+        // Prefill: 传入完整 prompt，初始化 KV Cache
+        var logits = model.Forward(idx, useCache: true);
+
+        // 取最后位置的 logits
+        var nextToken = SampleFromLogits(logits, temperature, topK, rng);
+        currentIdx = TensorOps.Concat([currentIdx, nextToken], dim: 1);
+
+        if (eosId != null && (int)nextToken.Data[0] == eosId.Value)
+            return currentIdx;
+
+        // Decode: 每步只传 1 个新 token
+        for (int i = 1; i < maxNewTokens; i++)
+        {
+            logits = model.Forward(nextToken, useCache: true);
+            nextToken = SampleFromLogits(logits, temperature, topK, rng);
+            currentIdx = TensorOps.Concat([currentIdx, nextToken], dim: 1);
+
+            if (eosId != null && (int)nextToken.Data[0] == eosId.Value)
+                break;
+        }
+
+        return currentIdx;
+    }
+
+    /// <summary>从 logits 中采样下一个 token</summary>
+    private static Tensor SampleFromLogits(Tensor logits, float temperature, int? topK, Random rng)
+    {
+        // 取最后时间步
+        int lastPos = logits.Shape[1] - 1;
+        var lastLogits = TensorOps.Slice(logits,
+            [(0, logits.Shape[0]), (lastPos, lastPos + 1), (0, logits.Shape[2])]);
+        lastLogits = lastLogits.Reshape(logits.Shape[0], logits.Shape[2]);
+
+        // Top-K 过滤
+        if (topK != null)
+            lastLogits = ApplyTopK(lastLogits, topK.Value);
+
+        Tensor idxNext;
+        if (temperature > 0)
+        {
+            var scaled = TensorOps.MulScalar(lastLogits, 1.0f / temperature);
+            var probs = TensorOps.Softmax(scaled, dim: -1);
+            idxNext = MultinomialSample(probs, rng);
+        }
+        else
+        {
+            idxNext = TensorOps.Argmax(lastLogits, dim: -1);
+        }
+
+        return idxNext.Reshape(idxNext.Shape[0], 1);
     }
 
     /// <summary>Top-K 过滤：只保留前 K 个最大值，其余设为 -∞</summary>
