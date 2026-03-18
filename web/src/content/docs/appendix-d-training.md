@@ -1,6 +1,7 @@
 ---
 title: "Appendix D: 训练增强"
 order: 90
+section: "appendix"
 summary: "学习率调度（Cosine Annealing + Warmup）和梯度裁剪，提升 GPT 训练稳定性"
 status: "done"
 tags: ["training", "optimization", "appendix"]

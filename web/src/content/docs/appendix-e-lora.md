@@ -1,6 +1,7 @@
 ---
 title: "Appendix E: LoRA 微调"
 order: 91
+section: "appendix"
 summary: "LoRA (Low-Rank Adaptation) 参数高效微调，用极少参数适配新任务"
 status: "done"
 tags: ["finetuning", "lora", "appendix"]
